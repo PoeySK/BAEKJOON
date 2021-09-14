@@ -24,18 +24,16 @@ public class HateCoin {
             long maxValue = Math.max(molecules, denominator);
             long minValue = Math.min(molecules, denominator);
 
-            denoArray.add(denominator);
-            moleArray.add(molecules);
 
             // 약분이 가능한 지 알기 위한 부분
             long g = GCD(maxValue, minValue);
 
             if (g > 1) { // 약분이 가능할 경우 기존 값을 삭제하고 약분한 값을 추가
-                denoArray.remove(i);
-                denoArray.add(denominator / g);
-                moleArray.remove(i);
-                moleArray.add(molecules / g);
+                denominator /= g;
+                molecules /= g;
             }
+            denoArray.add(denominator);
+            moleArray.add(molecules);
 
 
         }
