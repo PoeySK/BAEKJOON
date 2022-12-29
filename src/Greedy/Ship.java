@@ -14,45 +14,50 @@ public class Ship {
         int M = Integer.parseInt(br.readLine()); // 화물 개수
         String[] sm = br.readLine().split(" "); // 화물 무게
 
-        int[] crane = new int[N];
-        int[] cargo = new int[M];
+        Integer[] crane = new Integer[N];
+        ArrayList<Integer> cargo = new ArrayList<>();
 
         for (int i = 0; i < N; i++) {
             crane[i] = Integer.parseInt(sn[i]);
         }
-
         for (int i = 0; i < M; i++) {
-            cargo[i] = Integer.parseInt(sm[i]);
+            cargo.add(Integer.parseInt(sm[i]));
         }
+        Arrays.sort(crane, Collections.reverseOrder());
+        cargo.sort(Collections.reverseOrder());
 
-        Arrays.sort(crane);
-        Arrays.sort(cargo);
-
-        int index = 0;
-        int count = 1;
-        boolean check = true;
-
-        if(crane[crane.length - 1] < cargo[cargo.length - 1]){
+        if (crane[0] < cargo.get(0)) { // 화물의 무게가 매우 큰 경우
             bw.write("-1");
+            bw.flush();
+            br.close();
+            bw.close();
+
+            return;
         }
 
-        for (int i = M - 1; i >= 0; i--) {
-            for (int j = N - 1; j >= 0; j--) {
-                if(crane[j] >= cargo[i]){
+        int count = 0;
+
+        while (!cargo.isEmpty()) {
+            int index = 0;
+            for (int i = 0; i < N; i++) {
+                if (cargo.isEmpty() || cargo.size() <= index) { // 비거나 cargo보다 큰 범위를 탐색하는 경우
                     break;
                 }
+                int now = cargo.get(index);
+                if (crane[i] >= now) { // 지워지면 자동으로 원소가 밀림
+                    cargo.remove(index);
+                } else { // 지우지 못하면 index를 늘림
+                    index++;
+                    i--;
+                }
             }
+            count++;
         }
 
+        bw.write(count + "\n");
 
         bw.flush();
         br.close();
         bw.close();
     }
 }
-/*
-1 2
-1 1 2 2
-
-
- */
