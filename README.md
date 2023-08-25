@@ -1,3 +1,3 @@
 # Baekjoon
 
-Yeop's Baekjoon solution with "Java"
+Yeop's Baekjoon solution with "Java" and "JavaScript"
