@@ -1,4 +1,4 @@
-package Dijkstra;
+package Mst;
 
 import java.io.*;
 import java.util.*;
