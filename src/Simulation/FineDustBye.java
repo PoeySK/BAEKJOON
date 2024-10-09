@@ -6,7 +6,7 @@ import java.util.*;
 public class FineDustBye {
     static int R, C, T, result;
     static int[][] field;
-    static Node[] airCleaner = new Node[2];
+    static int airCleaner;
     static int[] dy = {-1, 1, 0, 0};
     static int[] dx = {0, 0, -1, 1};
 
@@ -26,7 +26,7 @@ public class FineDustBye {
             for (int j = 0; j < C; j++) {
                 field[i][j] = Integer.parseInt(st.nextToken());
                 if (field[i][j] == -1) {
-                    airCleaner[idx++] = new Node(i, j);
+                    airCleaner = i;
                 }
             }
         }
@@ -43,8 +43,8 @@ public class FineDustBye {
     private static void run() {
         for (int i = 0; i < T; i++) {
             spread();
-            upWind(airCleaner[0].y, airCleaner[1].x);
-            downWind(airCleaner[1].y, airCleaner[1].x);
+            upWind(airCleaner - 1, 0);
+            downWind(airCleaner, 0);
         }
 
         sum();
@@ -168,15 +168,5 @@ public class FineDustBye {
             }
         }
     }
-
-    static class Node {
-        int y, x;
-
-        Node(int y, int x) {
-            this.y = y;
-            this.x = x;
-        }
-    }
-
 }
 
