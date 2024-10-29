@@ -43,28 +43,13 @@ public class CombineFile {
                 sol[i][now] = Integer.MAX_VALUE;
                 for (int j = i; j < now; j++) {
                     int section = total[now] - total[i - 1]; // 구간 합
-                    int a = sol[i][j] + sol[j + 1][now] + section;
-                    System.out.println("now-" + now + " i-" + i + " j-" + j);
-                    System.out.println("sol[i][j]: " + sol[i][j] + " sol[j + 1][now]: " + sol[j + 1][now] + " section: " + section + " a: " + a);
                     sol[i][now] = Math.min(sol[i][now], sol[i][j] + sol[j + 1][now] + section);
                 }
-                print(sol);
             }
         }
 
         return sol[1][K];
     }
-
-    private static void print(int[][] sol) {
-        for (int i = 0; i < K + 1; i++) {
-            for (int j = 0; j < K + 1; j++) {
-                System.out.print(sol[i][j] + "\t");
-            }
-            System.out.println();
-        }
-        System.out.println("-------------------");
-    }
-
 }
 
 /*
