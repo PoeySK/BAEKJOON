@@ -48,7 +48,7 @@ public class Segmentation {
         // M >= 2
         for (int i = 2; i <= M; i++) {
             for (int j = i * 2 - 1; j <= N; j++) { // 구간별 시작지점 -> 2 * m - 1\
-                sol[i][j] = Math.max(sol[i][j - 1], sol[i - 1][j - 2] + sum[j] - sum[j - 1]);
+                sol[i][j] = sol[i][j - 1];
                 for (int k = j - 2; k >= (i - 1) * 2 - 1; k--) {
                     sol[i][j] = Math.max(sol[i][j], sol[i - 1][k] + (sum[j] - sum[k + 1]));
                 }
