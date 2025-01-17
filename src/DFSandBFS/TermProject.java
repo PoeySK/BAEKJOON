@@ -1,3 +1,5 @@
+package DFSandBFS;
+
 import java.io.*;
 import java.util.*;
 
