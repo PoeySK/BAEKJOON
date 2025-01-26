@@ -31,8 +31,6 @@ public class Firefly {
         Arrays.sort(down);
         Arrays.sort(up);
         result = N;
-        System.out.println(Arrays.toString(down));
-        System.out.println(Arrays.toString(up));
         run();
 
         /* 출력 */
@@ -44,8 +42,6 @@ public class Firefly {
         for (int i = 1; i <= H; i++) {
             int downCount = cntStone(down, i);
             int upCount = cntStone(up, H + 1 - i);
-
-            System.out.println("i-" + i + " | dc: " + downCount + ", uc: " + upCount);
 
             int count = upCount + downCount;
             if (result == count) {
