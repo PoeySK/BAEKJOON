@@ -1,3 +1,5 @@
+package DisjointSet;
+
 import java.io.*;
 import java.util.*;
 
