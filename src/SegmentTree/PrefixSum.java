@@ -16,78 +16,63 @@ public class PrefixSum {
         M = Integer.parseInt(s[1]);
         K = Integer.parseInt(s[2]);
 
-        long[] array = new long[N];
-        tree = new long[4 * N];
-        for (int i = 0; i < N; i++) {
+        long[] array = new long[N + 1];
+        int size = (int) Math.ceil(Math.log(N) / Math.log(2));
+        tree = new long[(1 << (size + 1)) + 1];
+        for (int i = 1; i < N + 1; i++) {
             long var = Long.parseLong(br.readLine());
             array[i] = var;
         }
-        Build(array, 1, 0, N - 1);
+        build(array, 1, 1, N);
 
         int test = M + K;
         while (test-- > 0) {
             String[] input = br.readLine().split(" ");
             int flag = Integer.parseInt(input[0]);
-            switch (flag) { // 1: update, 2: query
+            switch (flag) {
                 case 1:
                     int index = Integer.parseInt(input[1]);
                     long var = Long.parseLong(input[2]);
-                    long diff = var - array[index - 1]; // 기존의 값과 변경 값의 차이
-                    array[index - 1] = var; // 기존 입력 배열도 수정을 해주어야 다음 update에서도 적용 가능
-                    Update(1, 0, N - 1, index - 1, diff);
+                    long diff = var - array[index];
+                    array[index] = var;
+                    update(1, 1, N, index, diff);
                     break;
-                case 2: // index는 long타입으로 하지 않아도 됨. (N의 크기는 1,000,000)
+                case 2:
                     int left = Integer.parseInt(input[1]);
                     int right = Integer.parseInt(input[2]);
-                    long sum = Query(1, 0, N - 1, left - 1, right - 1);
-                    bw.write(sum + "\n");
-                    break;
-                default:
+                    bw.write(prefix(1, 1, N, left, right) + "\n");
                     break;
             }
         }
-        bw.flush();
         br.close();
         bw.close();
     }
 
-    public static void Build(long[] array, int node, int start, int end) {
-        if (start == end) { // leaf node 위치
-            tree[node] = array[start];
-        } else {
-            // parameter node 위치에 값들이 저장됨.
-            int mid = (start + end) / 2;
-            Build(array, 2 * node, start, mid);
-            Build(array, 2 * node + 1, mid + 1, end);
+    private static long build(long[] arr, int node, int start, int end) {
+        if (start == end) return tree[node] = arr[start];
 
-            tree[node] = tree[2 * node] + tree[2 * node + 1];
-        }
-    }
-
-    public static long Query(int node, int start, int end, int left, int right) {
-        if (right < start || end < left) { // index 범위 밖
-            return 0;
-        }
-        if (left <= start && end <= right) { // [left, right]가 [start, end]에 완전히 포함되는 경우
-            return tree[node];
-        }
         int mid = (start + end) / 2;
-        long leftNode = Query(2 * node, start, mid, left, right);
-        long rightNode = Query(2 * node + 1, mid + 1, end, left, right);
-        return leftNode + rightNode;
+        return tree[node] = build(arr, node * 2, start, mid) + build(arr, node * 2 + 1, mid + 1, end);
     }
 
-    public static void Update(int node, int start, int end, int index, long diff) {
-        if (index < start || end < index) { // index 범위 밖
-            return;
-        }
+    private static void update(int node, int start, int end, int index, long diff) {
+        if (index < start || index > end) return;
+
         tree[node] += diff;
-        if (start == end) { // leaf node 위치
-            return;
+        if (start != end) {
+            int mid = (start + end) / 2;
+            update(node * 2, start, mid, index, diff);
+            update(node * 2 + 1, mid + 1, end, index, diff);
         }
-        int mid = (start + end) / 2;
-        Update(2 * node, start, mid, index, diff);
-        Update(2 * node + 1, mid + 1, end, index, diff);
+    }
 
+    private static long prefix(int node, int start, int end, int left, int right) {
+        if (left > end || right < start) return 0;
+        if (left <= start && right >= end) return tree[node];
+
+        int mid = (start + end) / 2;
+        long leftPrefix = prefix(node * 2, start, mid, left, right);
+        long rightPrefix = prefix(node * 2 + 1, mid + 1, end, left, right);
+        return leftPrefix + rightPrefix;
     }
 }
