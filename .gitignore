@@ -1,2 +1,6 @@
 # Project exclude paths
 /out/
+
+# file
+Main.java
+Test.java
